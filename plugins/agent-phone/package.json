@@ -1,0 +1,9 @@
+{
+  "name": "agent-phone",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Claude Code plugin: give Claude its own phone number for calls and texts",
+  "license": "MIT",
+  "scripts": { "test": "node --test test/*.test.mjs" }
+}

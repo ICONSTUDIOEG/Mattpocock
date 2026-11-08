@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "phone": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server/index.mjs"],
+      "env": {
+        "TWILIO_ACCOUNT_SID": "${TWILIO_ACCOUNT_SID}",
+        "TWILIO_AUTH_TOKEN": "${TWILIO_AUTH_TOKEN}",
+        "CLAUDE_PHONE_NUMBER": "${CLAUDE_PHONE_NUMBER}",
+        "CLAUDE_PHONE_ALLOWED_TO": "${CLAUDE_PHONE_ALLOWED_TO:-}",
+        "CLAUDE_PHONE_VOICE": "${CLAUDE_PHONE_VOICE:-Polly.Joanna}",
+        "CLAUDE_PHONE_LANGUAGE": "${CLAUDE_PHONE_LANGUAGE:-en-US}"
+      }
+    }
+  }
+}

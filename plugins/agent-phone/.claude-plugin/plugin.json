@@ -1,0 +1,12 @@
+{
+  "name": "agent-phone",
+  "version": "0.1.0",
+  "description": "Give Claude its own phone number: send and read texts, place spoken calls, and read back call status and recordings. Backed by Twilio.",
+  "author": { "name": "ICON Studio" },
+  "license": "MIT",
+  "keywords": ["phone", "sms", "calls", "twilio", "telephony"],
+  "mcpServers": "./.mcp.json",
+  "hooks": "./hooks/hooks.json",
+  "skills": ["./skills/phone"],
+  "icon": "./.claude-plugin/icon.png"
+}
