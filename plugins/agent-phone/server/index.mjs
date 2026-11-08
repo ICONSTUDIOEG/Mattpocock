@@ -5,9 +5,12 @@
 
 import { createInterface } from "node:readline";
 import { loadConfig, createClient } from "./twilio.mjs";
+import { loadVoiceConfig, createVoiceClient } from "./elevenlabs.mjs";
 
 const cfg = loadConfig();
 const client = cfg.missing.length ? null : createClient(cfg);
+const voiceCfg = loadVoiceConfig();
+const voice = voiceCfg.missing.length ? null : createVoiceClient(voiceCfg, cfg);
 
 const num = { type: "string", description: "E.164 phone number, e.g. +201001234567" };
 
@@ -76,13 +79,67 @@ export const TOOLS = [
     },
     annotations: { readOnlyHint: true },
   },
+  {
+    name: "start_voice_call",
+    description:
+      "Start a live two-way phone conversation. An ElevenLabs voice agent calls the number from Claude's number, " +
+      "talks and listens in real time to achieve the goal you give it, then hangs up. " +
+      "Returns a conversation_id: read the transcript and outcome with get_voice_call once the call ends. " +
+      "Outbound: costs money and reaches a real person.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        to: num,
+        goal: { type: "string", description: "What the call must achieve, in one or two sentences" },
+        context: { type: "string", description: "Facts the agent may use: names, dates, what it may agree to" },
+        first_message: { type: "string", description: "Opening line, e.g. a greeting that says it is an AI assistant" },
+        language: { type: "string", description: "Agent language code, e.g. en, ar" },
+      },
+      required: ["to", "goal"],
+    },
+    annotations: { destructiveHint: true, openWorldHint: true },
+  },
+  {
+    name: "get_voice_call",
+    description: "Status, transcript, summary and success verdict of a two-way voice call by conversation_id.",
+    inputSchema: {
+      type: "object",
+      properties: { conversation_id: { type: "string" } },
+      required: ["conversation_id"],
+    },
+    annotations: { readOnlyHint: true },
+  },
+  {
+    name: "list_voice_calls",
+    description: "Recent two-way voice calls handled by the ElevenLabs agent, inbound and outbound, newest first.",
+    inputSchema: {
+      type: "object",
+      properties: { limit: { type: "integer", minimum: 1, maximum: 100, default: 20 } },
+    },
+    annotations: { readOnlyHint: true },
+  },
 ];
 
 async function runTool(name, a = {}) {
   if (name === "phone_whoami") {
+    const voiceCalls = voice ? { enabled: true } : { enabled: false, missing: voiceCfg.missing };
     return cfg.missing.length
-      ? { configured: false, missing: cfg.missing }
-      : { configured: true, number: cfg.number, allowlist: cfg.allow.length ? cfg.allow : "any number" };
+      ? { configured: false, missing: cfg.missing, two_way_voice: voiceCalls }
+      : {
+          configured: true,
+          number: cfg.number,
+          allowlist: cfg.allow.length ? cfg.allow : "any number",
+          two_way_voice: voiceCalls,
+        };
+  }
+  if (["start_voice_call", "get_voice_call", "list_voice_calls"].includes(name)) {
+    if (!voice) throw new Error(`Two-way voice not configured. Set: ${voiceCfg.missing.join(", ")}`);
+    if (name === "start_voice_call") {
+      if (!client) throw new Error(`Phone not configured. Set: ${cfg.missing.join(", ")}`);
+      return voice.startCall({ ...a, firstMessage: a.first_message });
+    }
+    if (name === "get_voice_call") return voice.getCall(a);
+    return voice.listCalls(a);
   }
   if (!client) throw new Error(`Phone not configured. Set: ${cfg.missing.join(", ")}`);
   switch (name) {
@@ -115,7 +172,7 @@ async function handle(req) {
         result: {
           protocolVersion: params?.protocolVersion || "2025-06-18",
           capabilities: { tools: {} },
-          serverInfo: { name: "agent-phone", version: "0.1.0" },
+          serverInfo: { name: "agent-phone", version: "0.2.0" },
         },
       });
     }

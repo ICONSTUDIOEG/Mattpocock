@@ -2,14 +2,20 @@
   "mcpServers": {
     "phone": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/server/index.mjs"],
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/server/index.mjs"
+      ],
       "env": {
         "TWILIO_ACCOUNT_SID": "${TWILIO_ACCOUNT_SID}",
         "TWILIO_AUTH_TOKEN": "${TWILIO_AUTH_TOKEN}",
         "CLAUDE_PHONE_NUMBER": "${CLAUDE_PHONE_NUMBER}",
         "CLAUDE_PHONE_ALLOWED_TO": "${CLAUDE_PHONE_ALLOWED_TO:-}",
         "CLAUDE_PHONE_VOICE": "${CLAUDE_PHONE_VOICE:-Polly.Joanna}",
-        "CLAUDE_PHONE_LANGUAGE": "${CLAUDE_PHONE_LANGUAGE:-en-US}"
+        "CLAUDE_PHONE_LANGUAGE": "${CLAUDE_PHONE_LANGUAGE:-en-US}",
+        "ELEVENLABS_API_KEY": "${ELEVENLABS_API_KEY:-}",
+        "ELEVENLABS_AGENT_ID": "${ELEVENLABS_AGENT_ID:-}",
+        "ELEVENLABS_PHONE_NUMBER_ID": "${ELEVENLABS_PHONE_NUMBER_ID:-}",
+        "CLAUDE_PHONE_OWNER_NAME": "${CLAUDE_PHONE_OWNER_NAME:-}"
       }
     }
   }

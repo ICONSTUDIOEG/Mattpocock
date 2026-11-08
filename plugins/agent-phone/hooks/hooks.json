@@ -2,7 +2,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "mcp__.*phone.*__(send_sms|place_call)",
+        "matcher": "mcp__.*phone.*__(send_sms|place_call|start_voice_call)",
         "hooks": [
           {
             "type": "command",

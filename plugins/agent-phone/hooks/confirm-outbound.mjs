@@ -11,9 +11,12 @@ process.stdin.on("end", () => {
   } catch {}
   const tool = String(input.tool_name || "");
   const a = input.tool_input || {};
-  const what = tool.endsWith("place_call")
-    ? `Claude wants to CALL ${a.to} and say: "${a.message}"${a.record ? " (recording on)" : ""}`
-    : `Claude wants to TEXT ${a.to}: "${a.body}"`;
+  const what = tool.endsWith("start_voice_call")
+    ? `Claude wants a voice agent to hold a LIVE CALL with ${a.to}. Goal: "${a.goal}"` +
+      (a.context ? ` | Context it may share: "${a.context}"` : "")
+    : tool.endsWith("place_call")
+      ? `Claude wants to CALL ${a.to} and say: "${a.message}"${a.record ? " (recording on)" : ""}`
+      : `Claude wants to TEXT ${a.to}: "${a.body}"`;
   process.stdout.write(
     JSON.stringify({
       hookSpecificOutput: {

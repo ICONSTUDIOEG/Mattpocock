@@ -1,10 +1,10 @@
 {
   "name": "agent-phone",
-  "version": "0.1.0",
-  "description": "Give Claude its own phone number: send and read texts, place spoken calls, and read back call status and recordings. Backed by Twilio.",
+  "version": "0.2.0",
+  "description": "Give Claude its own phone number: texts, spoken calls, and live two-way voice calls through an ElevenLabs agent, with transcripts read back. Backed by Twilio and ElevenLabs.",
   "author": { "name": "ICON Studio" },
   "license": "MIT",
-  "keywords": ["phone", "sms", "calls", "twilio", "telephony"],
+  "keywords": ["phone", "sms", "calls", "twilio", "telephony", "elevenlabs", "voice-agent"],
   "mcpServers": "./.mcp.json",
   "hooks": "./hooks/hooks.json",
   "skills": ["./skills/phone"],

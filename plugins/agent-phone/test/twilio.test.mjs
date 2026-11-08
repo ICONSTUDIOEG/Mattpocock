@@ -95,7 +95,7 @@ test("MCP server answers initialize and tools/list over stdio", async () => {
   assert.equal(lines[0].result.serverInfo.name, "agent-phone");
   assert.deepEqual(
     lines[1].result.tools.map((t) => t.name),
-    ["phone_whoami", "send_sms", "list_messages", "place_call", "get_call", "list_calls"],
+    ["phone_whoami", "send_sms", "list_messages", "place_call", "get_call", "list_calls", "start_voice_call", "get_voice_call", "list_voice_calls"],
   );
   assert.match(lines[2].result.content[0].text, /"configured": false/);
 });
