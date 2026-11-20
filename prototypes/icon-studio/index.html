@@ -8,6 +8,8 @@
 <meta name="theme-color" content="#050507">
 <meta property="og:title" content="ICON Studio | Where cinema meets physics">
 <meta property="og:url" content="https://www.icon-studios.com">
+<link rel="icon" type="image/png" href="assets/icon-logo.png">
+<link rel="preload" as="image" href="assets/icon-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -18,7 +20,7 @@
    ========================================================================== */
 :root{
   --bg:#050507; --bg-2:#0a0b10; --bg-3:#10121a;
-  --ion:#00F0FF; --ion-2:#1E7BFF; --ion-soft:rgba(0,240,255,.14);
+  --ion:#00F0FF; --ion-2:#0A70B9; --brand-blue:#0A70B9; --brand-ink:#221F1F; --ion-soft:rgba(0,240,255,.14);
   --gold:#E3B66B; --copper:#C47A4A; --gold-soft:rgba(227,182,107,.16);
   --text:#EEF1F6; --muted:#9AA1B0; --dim:#626877;
   --glass:rgba(255,255,255,.035); --glass-2:rgba(255,255,255,.065); --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
@@ -41,6 +43,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 ::selection{background:var(--ion);color:#00161a}
 :focus-visible{outline:2px solid var(--ion);outline-offset:3px;border-radius:6px}
 .mono{font-family:var(--f-mono);letter-spacing:.02em}
+[hidden]{display:none !important}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .skip{position:fixed;top:-60px;left:16px;z-index:200;background:var(--ion);color:#00161a;padding:10px 16px;border-radius:10px;font-weight:600}
 .skip:focus{top:16px}
@@ -68,15 +71,31 @@ body.has-cursor .cursor-dot, body.has-cursor .cursor-ring{opacity:1}
 .progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:calc(var(--z-nav) + 1);transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--ion),var(--gold))}
 
 /* ==========================================================================
-   Loader
+   Intro: logo, iris through the pupil, RICOPEKA clip, iris back into the nav logo
    ========================================================================== */
-.loader{position:fixed;inset:0;z-index:var(--z-loader);background:var(--bg);display:grid;place-items:center}
-.loader-inner{display:grid;gap:18px;justify-items:center}
-.loader-mark{font-family:var(--f-display);font-weight:700;font-size:clamp(42px,8vw,96px);letter-spacing:.18em;line-height:1;display:flex;gap:.02em}
-.loader-mark span{display:inline-block;background:linear-gradient(180deg,#fff,var(--ion));-webkit-background-clip:text;background-clip:text;color:transparent}
-.loader-bar{width:min(260px,60vw);height:1px;background:var(--line);position:relative;overflow:hidden}
-.loader-bar i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--ion),var(--gold))}
-.loader-meta{font-size:11px;color:var(--muted);letter-spacing:.3em;text-transform:uppercase}
+.intro{position:fixed;inset:0;z-index:var(--z-loader);background:#000;overflow:hidden}
+.intro-logo{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:26px;z-index:2}
+.intro-logo img{height:min(44vh,360px);width:auto;transform-origin:87.6% 56.6%;will-change:transform;opacity:0}
+.intro-tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);opacity:0}
+.intro-stage{position:absolute;inset:0;z-index:3;clip-path:circle(0px at 50% 50%);background:var(--brand-blue)}
+.intro-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:38% 50%}
+.intro-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 22%,transparent 58%,rgba(0,0,0,.72))}
+.intro-ui{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;
+  padding:0 max(24px,env(safe-area-inset-right,0px)) calc(34px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));opacity:0}
+.intro-title{display:grid;gap:6px}
+.intro-title .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.intro-title h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:clamp(44px,8vw,120px);line-height:.85;letter-spacing:-.045em;color:#fff;text-shadow:0 10px 40px rgba(0,0,0,.35)}
+.intro-title p{margin:0;color:rgba(255,255,255,.86);font-size:15px}
+.intro-actions{display:flex;gap:10px}
+.intro-btn{display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;transition:border-color .3s,background .3s}
+.intro-btn:hover{border-color:#fff;background:rgba(0,0,0,.45)}
+.intro-btn[aria-pressed=true]{border-color:var(--ion);color:var(--ion)}
+.intro-skip-top{position:absolute;z-index:5;top:calc(18px + env(safe-area-inset-top,0px));right:max(18px,env(safe-area-inset-right,0px))}
+.intro-progress{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:5;background:rgba(255,255,255,.15)}
+.intro-progress i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--ion),#fff)}
+.intro-play{position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);padding:16px 26px;font-size:12px}
+.foot-link{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.foot-link:hover{color:var(--ion)}
 
 /* ==========================================================================
    Navigation
@@ -84,8 +103,7 @@ body.has-cursor .cursor-dot, body.has-cursor .cursor-ring{opacity:1}
 .nav{position:fixed;top:14px;left:14px;right:14px;margin:0 auto;max-width:var(--maxw);z-index:var(--z-nav);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 10px 10px 20px;border-radius:999px;border:1px solid var(--line);background:rgba(10,11,16,.38);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);transition:background .4s,border-color .4s,box-shadow .4s}
 .nav.is-scrolled{background:rgba(8,9,13,.68);border-color:var(--line-2);box-shadow:0 20px 60px -30px rgba(0,0,0,.9)}
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;letter-spacing:.14em;font-size:15px}
-.logo-mark{width:26px;height:26px;border-radius:50%;position:relative;border:1.5px solid var(--ion);box-shadow:0 0 18px rgba(0,240,255,.45),inset 0 0 10px rgba(0,240,255,.35)}
-.logo-mark::after{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.logo-img{height:32px;width:auto;flex:none}
 .logo small{font-weight:400;letter-spacing:.3em;color:var(--muted);font-size:10px;margin-left:2px}
 .nav-links{display:flex;gap:4px;list-style:none;margin:0;padding:0}
 .nav-links a{display:block;padding:8px 14px;border-radius:999px;font-size:13.5px;color:var(--muted);transition:color .3s,background .3s}
@@ -357,16 +375,35 @@ footer{position:relative;z-index:var(--z-content);padding:48px var(--pad) 40px;b
 <div class="cursor-ring" aria-hidden="true"></div>
 <div class="progress" aria-hidden="true"></div>
 
-<div class="loader" aria-hidden="true">
-  <div class="loader-inner">
-    <div class="loader-mark"><span>I</span><span>C</span><span>O</span><span>N</span></div>
-    <div class="loader-bar"><i></i></div>
-    <div class="loader-meta mono"><span class="loader-num">000</span> / Ionizing field</div>
+<div class="intro" id="intro" role="region" aria-label="RICOPEKA intro">
+  <div class="intro-logo">
+    <img src="assets/icon-logo.png" alt="ICON Studio" width="437" height="758">
+    <span class="intro-tag">ICON Studio &middot; Est. 1998 &middot; presents</span>
   </div>
+  <div class="intro-stage">
+    <video class="intro-video" muted playsinline preload="auto" poster="assets/ricopeka-poster.jpg">
+      <source src="assets/ricopeka-intro-720.mp4" type="video/mp4" media="(max-width: 900px)">
+      <source src="assets/ricopeka-intro.mp4" type="video/mp4">
+    </video>
+    <div class="intro-ui">
+      <div class="intro-title">
+        <span class="k">An ICON Studio original series &middot; Pilot</span>
+        <h2>RICOPEKA</h2>
+        <p>AI-hybrid animation, made in Cairo.</p>
+      </div>
+      <div class="intro-actions">
+        <button class="intro-btn" type="button" data-intro="sound" aria-pressed="false">Sound on</button>
+        <button class="intro-btn" type="button" data-intro="skip">Enter site &rarr;</button>
+      </div>
+    </div>
+    <button class="intro-btn intro-play" type="button" data-intro="play" hidden>&#9654; Play intro</button>
+    <div class="intro-progress" aria-hidden="true"><i></i></div>
+  </div>
+  <button class="intro-btn intro-skip-top" type="button" data-intro="skip">Skip intro</button>
 </div>
 
 <header class="nav" id="nav">
-  <a href="#top" class="logo" aria-label="ICON Studio home"><span class="logo-mark" aria-hidden="true"></span>ICON<small>STUDIO</small></a>
+  <a href="#top" class="logo" aria-label="ICON Studio home"><img class="logo-img" src="assets/icon-logo.png" alt="" width="18" height="32">ICON<small>STUDIO</small></a>
   <ul class="nav-links" id="nav-links">
     <li><a href="#capabilities" data-nav>Capabilities</a></li>
     <li><a href="#pipeline" data-nav>AI Pipeline</a></li>
@@ -426,7 +463,7 @@ footer{position:relative;z-index:var(--z-content);padding:48px var(--pad) 40px;b
           <p>Concept to final grade. Story architecture, previs, live action and virtual production, directed with a filmmaker's discipline.</p>
           <div class="tags"><span class="tag">Previs</span><span class="tag">Virtual Production</span><span class="tag">Grade</span></div>
         </article>
-        <article class="card glass" data-reveal data-card style="--hue:#1E7BFF" tabindex="0">
+        <article class="card glass" data-reveal data-card style="--hue:#2F8FD8" tabindex="0">
           <span class="card-num">02</span>
           <svg class="card-icon" viewBox="0 0 54 54" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M27 4l20 11.5v23L27 50 7 38.5v-23z"/><path d="M27 27l20-11.5M27 27v23M27 27L7 15.5"/></svg>
           <h3>3D Animation</h3>
@@ -515,8 +552,8 @@ footer{position:relative;z-index:var(--z-content);padding:48px var(--pad) 40px;b
         <p class="lede" data-reveal>Series, commercials, product films and sound. Open any frame for a preview. Each tile accepts a real reel through its <span class="mono">data-video</span> attribute.</p>
       </div>
       <div class="works">
-        <article class="work" data-work data-hue="188" data-title="RICOPEKA" data-sub="AI-hybrid animated Arabic series &middot; Pilot" data-video="">
-          <button class="work-media" aria-label="Preview RICOPEKA"><div class="work-poster" style="--h:188"></div><div class="work-ui"><div class="row"><span class="rec">REC</span><span class="tc">00:00:00:00</span></div><span class="play">Play reel</span></div></button>
+        <article class="work" data-work data-hue="188" data-title="RICOPEKA" data-sub="AI-hybrid animated Arabic series &middot; Pilot" data-video="assets/ricopeka-intro.mp4">
+          <button class="work-media" aria-label="Preview RICOPEKA"><div class="work-poster" style="--h:188;background:url(assets/ricopeka-poster.jpg) center/cover"></div><div class="work-ui"><div class="row"><span class="rec">REC</span><span class="tc">00:00:00:00</span></div><span class="play">Play reel</span></div></button>
           <div class="work-meta"><div><h3>RICOPEKA</h3><p>AI-hybrid animated Arabic series</p></div><span class="tag">Series</span></div>
         </article>
         <article class="work" data-work data-hue="38" data-title="Inline Four" data-sub="Automotive lubricant TVC &middot; Engine and oil-flow simulation" data-video="">
@@ -587,7 +624,7 @@ footer{position:relative;z-index:var(--z-content);padding:48px var(--pad) 40px;b
   <div class="foot-big" aria-hidden="true">ICON STUDIO</div>
   <div class="foot">
     <span>&copy; <span class="js-year">2026</span> ICON Studio. Est. 1998.</span>
-    <span class="mono">H-ENGINE v1.0 &middot; WebGL</span>
+    <button type="button" class="foot-link mono" data-intro="replay">Replay intro</button>
     <a href="https://www.icon-studios.com">www.icon-studios.com</a>
   </div>
 </footer>
@@ -617,7 +654,7 @@ footer{position:relative;z-index:var(--z-content);padding:48px var(--pad) 40px;b
   </div>
 </dialog>
 
-<noscript><style>.loader{display:none}body.is-loading{overflow:auto}</style></noscript>
+<noscript><style>.intro{display:none}body.is-loading{overflow:auto}</style></noscript>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -648,6 +685,7 @@ const S = {
   shockQueue: [],
   stats: { fps: 60, frameMs: 16.7, physMs: 0, count: 0, kinetic: 0 },
   engine: null,
+  introActive: false,
   hoverWork: null,
   reel: null
 };
@@ -818,6 +856,7 @@ document.addEventListener('click', e => {
   else if (a === 'close-reel') closeReel();
 });
 addEventListener('keydown', e => {
+  if (S.introActive) { if (e.key === 'Escape') skipIntroNow(); return; }
   if (e.target.closest('input,textarea,select,[contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
   const k = e.key.toLowerCase();
   if (k === 's') supernova();
@@ -1106,7 +1145,8 @@ function loop(now) {
   if (ptr.type === 'mouse' && now - ptr.lastMove > 2500) ptr.active = false;
   S.scrollVel *= Math.exp(-dt * 6);
   S.flash *= Math.exp(-dt * 3.5);
-  if (S.engine) S.engine.frame(dt, now / 1000);
+  if (S.engine && !S.introActive) S.engine.frame(dt, now / 1000);
+  if (S.introActive && introVid.duration) introBar.style.transform = `scaleX(${(introVid.currentTime / introVid.duration).toFixed(4)})`;
   drawTrail(dt);
   if (S.hoverWork) S.hoverWork.el.textContent = tc((now - S.hoverWork.t0) / 1000);
   if (S.reel) drawReel(now);
@@ -1129,25 +1169,124 @@ const glReady = import(THREE_URL)
   .catch(() => { document.documentElement.classList.add('no-webgl'); S.stats.count = 0; });
 requestAnimationFrame(loop);
 
-const loaderNum = $('.loader-num'), loaderBar = $('.loader-bar i'), loader = $('.loader');
+/* Intro controller. Sequence: logo reveal -> push into the pupil while an iris opens
+   from it onto the RICOPEKA clip -> clip plays -> iris closes onto the nav logo's pupil. */
+const intro = $('#intro'), introLogo = $('.intro-logo img'), stage = $('.intro-stage');
+const introUI = $('.intro-ui'), playBtn = $('[data-intro="play"]'), soundBtn = $('[data-intro="sound"]');
 const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-const timeout = new Promise(r => setTimeout(r, 4000));
-const progress = { v: 0 };
-let loaderTween = null;
-if (hasGSAP) loaderTween = gsap.to(progress, { v: 86, duration: 1.6, ease: 'power2.out', onUpdate: () => { loaderNum.textContent = String(Math.round(progress.v)).padStart(3, '0'); loaderBar.style.transform = `scaleX(${progress.v / 100})`; } });
-Promise.race([Promise.all([glReady, fontsReady]), timeout]).then(() => {
-  if (!hasGSAP) { loader.remove(); document.body.classList.remove('is-loading'); return; }
-  loaderTween && loaderTween.kill();
-  const tl = gsap.timeline();
-  tl.to(progress, { v: 100, duration: 0.45, ease: 'power2.out', onUpdate: () => { loaderNum.textContent = String(Math.round(progress.v)).padStart(3, '0'); loaderBar.style.transform = `scaleX(${progress.v / 100})`; } })
-    .to('.loader-mark span', { yPercent: -110, opacity: 0, stagger: 0.05, duration: 0.5, ease: 'power3.in' })
-    .to(loader, { autoAlpha: 0, duration: 0.6, ease: 'power2.out', onComplete: () => { loader.remove(); document.body.classList.remove('is-loading'); if (window.ScrollTrigger) ScrollTrigger.refresh(); } }, '-=0.15')
-    .add(() => { if (S.engine) S.engine.ignite(); }, '<')
-    .from('.hero-title .line > span', { yPercent: 115, rotate: 4, duration: 1.3, ease: 'expo.out', stagger: 0.12 }, '<0.1')
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const PUPIL = { x: 0.876, y: 0.566 };
+const pupilOf = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width * PUPIL.x, y: r.top + r.height * PUPIL.y }; };
+const iris = { r: 0, x: innerWidth / 2, y: innerHeight / 2 };
+const drawIris = () => { stage.style.clipPath = `circle(${iris.r.toFixed(1)}px at ${iris.x.toFixed(1)}px ${iris.y.toFixed(1)}px)`; };
+let introState = 'idle';
+const videoUnavailable = () => !!introVid.error || introVid.networkState === 3;
+
+let seenIntro = false;
+try { seenIntro = sessionStorage.getItem('icon-intro-seen') === '1'; } catch (err) { seenIntro = false; }
+
+function revealSite(fromIntro) {
+  document.body.classList.remove('is-loading');
+  if (window.ScrollTrigger) ScrollTrigger.refresh();
+  if (S.engine) S.engine.ignite();
+  if (!hasGSAP) return;
+  const tl = gsap.timeline({ delay: fromIntro ? 0.45 : 0 });
+  tl.from('.hero-title .line > span', { yPercent: 115, rotate: 4, duration: 1.3, ease: 'expo.out', stagger: 0.12 })
     .from('[data-hero]', { opacity: 0, y: 24, duration: 1, ease: 'expo.out', stagger: 0.08 }, '<0.35')
-    .from('.nav', { y: -30, opacity: 0, duration: 0.9, ease: 'expo.out' }, '<')
     .from('.hud, .scroll-cue, .hero-readout', { opacity: 0, y: 16, duration: 0.8, ease: 'power3.out', stagger: 0.08 }, '<0.2');
+  if (!fromIntro) tl.from('.nav', { y: -30, opacity: 0, duration: 0.9, ease: 'expo.out' }, 0.2);
+}
+
+function startVideo() {
+  playBtn.hidden = true;
+  const pr = introVid.play();
+  if (pr && pr.catch) pr.catch(() => { playBtn.hidden = false; });
+}
+
+function irisIn() {
+  if (introState !== 'logo') return;
+  if (videoUnavailable()) { irisOut(); return; }
+  introState = 'video';
+  const p = pupilOf(introLogo);
+  iris.x = p.x; iris.y = p.y; iris.r = 0; drawIris();
+  const R = Math.hypot(Math.max(p.x, innerWidth - p.x), Math.max(p.y, innerHeight - p.y)) + 4;
+  try { introVid.currentTime = 0; } catch (err) { /* metadata not ready yet; playback starts at 0 anyway */ }
+  startVideo();
+  gsap.timeline()
+    .to('.intro-tag', { opacity: 0, duration: 0.3 })
+    .to(introLogo, { scale: 9, duration: 1.25, ease: 'expo.in' }, '<')
+    .to(iris, { r: R, duration: 1.25, ease: 'expo.inOut', onUpdate: drawIris }, '-=0.5')
+    .set(stage, { clipPath: 'none' })
+    .to(introUI, { opacity: 1, duration: 0.6 }, '-=0.5')
+    .from('.intro-title > *', { y: 26, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08 }, '<');
+}
+
+function irisOut() {
+  if (introState === 'out' || introState === 'done') return;
+  const fromLogo = introState === 'logo';
+  introState = 'out';
+  try { sessionStorage.setItem('icon-intro-seen', '1'); } catch (err) { /* private mode: the intro simply plays again next time */ }
+  S.introActive = false;
+  gsap.killTweensOf([introLogo, iris, introUI]);
+  const to = pupilOf($('.logo-img'));
+  if (fromLogo) {
+    iris.r = 0; drawIris();
+    revealSite(true);
+    gsap.to(intro, { autoAlpha: 0, duration: 0.8, ease: 'power2.out', onComplete: () => { intro.remove(); introState = 'done'; } });
+    return;
+  }
+  if (stage.style.clipPath === 'none') Object.assign(iris, { r: Math.hypot(innerWidth, innerHeight), x: innerWidth / 2, y: innerHeight / 2 });
+  drawIris();
+  gsap.set(introLogo.parentNode, { autoAlpha: 0 });
+  gsap.set(intro, { backgroundColor: 'transparent' });
+  $$('.intro-skip-top', intro).forEach(b => b.style.display = 'none');
+  revealSite(true);
+  gsap.timeline({ onComplete: () => { introVid.pause(); intro.remove(); introState = 'done'; } })
+    .to(introUI, { opacity: 0, duration: 0.3 })
+    .to(introVid, { volume: 0, duration: 0.9 }, '<')
+    .to(iris, { r: 0, x: to.x, y: to.y, duration: 1.15, ease: 'expo.inOut', onUpdate: drawIris }, '<0.05')
+    .fromTo('.logo-img', { scale: 1 }, { scale: 1.35, duration: 0.25, yoyo: true, repeat: 1, ease: 'power2.out' }, '-=0.1');
+}
+function skipIntroNow() { irisOut(); }
+
+const introVid = $('.intro-video'), introBar = $('.intro-progress i');
+introVid.addEventListener('ended', irisOut);
+intro.addEventListener('click', e => {
+  const b = e.target.closest('[data-intro]'); if (!b) return;
+  const a = b.dataset.intro;
+  if (a === 'skip') skipIntroNow();
+  else if (a === 'play') startVideo();
+  else if (a === 'sound') {
+    introVid.muted = !introVid.muted;
+    if (!introVid.muted) { introVid.volume = 1; if (introVid.paused) startVideo(); }
+    b.setAttribute('aria-pressed', String(!introVid.muted));
+    b.textContent = introVid.muted ? 'Sound on' : 'Sound off';
+  }
 });
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-intro="replay"]')) return;
+  try { sessionStorage.removeItem('icon-intro-seen'); } catch (err) { /* nothing stored */ }
+  location.reload();
+});
+
+if (S.reduced || seenIntro || !hasGSAP) {
+  intro.remove();
+  Promise.race([Promise.all([glReady, fontsReady]), wait(2500)]).then(() => revealSite(false));
+} else {
+  S.introActive = true;
+  introState = 'logo';
+  document.body.classList.add('is-loading');
+  const videoReady = new Promise(res => {
+    if (introVid.readyState >= 3) return res();
+    introVid.addEventListener('canplaythrough', res, { once: true });
+    introVid.addEventListener('error', res, { once: true, capture: true });
+    setTimeout(res, 4000);
+  });
+  gsap.timeline()
+    .fromTo(introLogo, { opacity: 0, scale: 0.86, filter: 'blur(14px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.2, ease: 'expo.out' })
+    .fromTo('.intro-tag', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '<0.35');
+  Promise.all([videoReady, fontsReady, wait(1900)]).then(irisIn);
+}
 
 /* ==========================================================================
    11. Hydrogen Physics Engine (Three.js)
@@ -1243,7 +1382,7 @@ function createEngine(THREE) {
     // Colour: ion cyan to ion blue, deep blue, and a warm gold/copper minority
     const c = rnd();
     if (c < 0.62) { const m = rnd(); col[i3] = 0.0 + 0.12 * m; col[i3 + 1] = 0.94 - 0.46 * m; col[i3 + 2] = 1.0; }
-    else if (c < 0.9) { col[i3] = 0.12; col[i3 + 1] = 0.28; col[i3 + 2] = 0.95; }
+    else if (c < 0.9) { col[i3] = 0.05; col[i3 + 1] = 0.46; col[i3 + 2] = 0.82; }
     else if (c < 0.96) { col[i3] = 0.89; col[i3 + 1] = 0.71; col[i3 + 2] = 0.42; }
     else { col[i3] = 0.77; col[i3 + 1] = 0.48; col[i3 + 2] = 0.29; }
     const big = rnd() < 0.02;
