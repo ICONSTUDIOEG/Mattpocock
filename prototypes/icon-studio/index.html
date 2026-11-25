@@ -255,6 +255,29 @@ section{position:relative;padding:clamp(96px,14vh,160px) var(--pad)}
 .reel-close:hover{border-color:var(--ion)}
 
 /* ==========================================================================
+   Clients
+   ========================================================================== */
+.clients{display:grid;grid-template-columns:repeat(5,1fr);list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.client{position:relative;display:grid;place-items:center;min-height:170px;padding:28px 20px 40px;border-left:1px solid var(--line);isolation:isolate;--gx:50%;--gy:50%}
+.client:first-child{border-left:0}
+.client figure{margin:0;display:grid;place-items:center}
+.client::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(220px circle at var(--gx) var(--gy),rgba(0,240,255,.13),transparent 65%);opacity:0;transition:opacity .45s}
+.client img{height:calc(var(--lh,44px) * 1.22);width:auto;max-width:100%;opacity:.62;transition:opacity .45s,transform .6s var(--ease),filter .45s}
+.client figcaption{position:absolute;left:8px;right:8px;bottom:14px;text-align:center;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);opacity:0;transform:translateY(6px);transition:opacity .45s,transform .45s var(--ease)}
+.client:hover::before,.client:focus-visible::before{opacity:1}
+.client:hover img,.client:focus-visible img{opacity:1;transform:scale(1.06);filter:drop-shadow(0 0 16px rgba(0,240,255,.35))}
+.client:hover figcaption,.client:focus-visible figcaption{opacity:1;transform:none}
+@media (max-width:860px){
+  .clients{grid-template-columns:repeat(2,1fr)}
+  .client{border-left:0;border-top:1px solid var(--line);min-height:140px}
+  .client:nth-child(-n+2){border-top:0}
+  .client:nth-child(2n){border-left:1px solid var(--line)}
+  .client:last-child{grid-column:span 2}
+  .client img{height:calc(var(--lh,44px) * .88);opacity:.8}
+  .client figcaption{opacity:1;transform:none}
+}
+
+/* ==========================================================================
    Contact and footer
    ========================================================================== */
 .contact{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(32px,6vw,96px);align-items:start}
@@ -580,11 +603,31 @@ footer{position:relative;z-index:var(--z-content);padding:48px var(--pad) 40px;b
     </div>
   </section>
 
+  <!-- CLIENTS: logos as white silhouettes, full brightness and a field pull on hover -->
+  <section id="clients" aria-labelledby="clients-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal>05 / Clients</p>
+          <h2 class="h2" id="clients-title" data-reveal>Stories told<br><em>for those who trust us.</em></h2>
+        </div>
+        <p class="lede" data-reveal>Global technology, world health, regional broadcast and a world expo. Different briefs, the same standard of craft.</p>
+      </div>
+      <ul class="clients" data-reveal>
+        <li class="client" tabindex="0" data-client style="--lh:34px"><figure><img src="assets/clients/huawei.png" alt="Huawei" width="423" height="120" loading="lazy"><figcaption>Huawei</figcaption></figure></li>
+        <li class="client" tabindex="0" data-client style="--lh:38px"><figure><img src="assets/clients/who.png" alt="World Health Organization" width="370" height="120" loading="lazy"><figcaption>World Health Organization</figcaption></figure></li>
+        <li class="client" tabindex="0" data-client style="--lh:56px"><figure><img src="assets/clients/expo-2020-dubai.png" alt="Expo 2020 Dubai" width="226" height="120" loading="lazy"><figcaption>Expo 2020 Dubai</figcaption></figure></li>
+        <li class="client" tabindex="0" data-client style="--lh:62px"><figure><img src="assets/clients/jeem.png" alt="JEEM TV" width="83" height="120" loading="lazy"><figcaption>JEEM TV</figcaption></figure></li>
+        <li class="client" tabindex="0" data-client style="--lh:50px"><figure><img src="assets/clients/audio-technology.png" alt="Audio Technology" width="180" height="120" loading="lazy"><figcaption>Audio Technology</figcaption></figure></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- CONTACT: formation 5, portal ring -->
   <section id="contact" data-formation="5" aria-labelledby="contact-title">
     <div class="wrap contact">
       <div>
-        <p class="eyebrow" data-reveal>05 / Start a Project</p>
+        <p class="eyebrow" data-reveal>06 / Start a Project</p>
         <h2 class="h2" id="contact-title" data-reveal>Bring the story.<br><em>We bring the physics.</em></h2>
         <p class="lede" data-reveal>Series, commercials, films, sound or an AI pipeline for your own studio. Tell us what you are building and we will reply within two working days.</p>
         <ul class="contact-list" data-reveal>
@@ -700,7 +743,7 @@ document.querySelectorAll('.js-year').forEach(n => n.textContent = new Date().ge
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
-const INTERACTIVE = 'a,button,input,textarea,select,label,summary,[data-card],[data-step],.hud,.nav,dialog';
+const INTERACTIVE = 'a,button,input,textarea,select,label,summary,[data-card],[data-step],[data-client],.hud,.nav,dialog';
 
 /* ==========================================================================
    1. Pointer input (window level, so the canvas never blocks the UI)
@@ -907,6 +950,17 @@ $$('[data-card]').forEach(card => {
   card.addEventListener('pointerleave', leave);
   card.addEventListener('blur', leave);
   addEventListener('scroll', () => { if (S.attractor.strength > 0.01 && card.matches(':hover')) updateCenter(); }, { passive: true });
+});
+$$('[data-client]').forEach(cell => {
+  const center = () => { const r = cell.getBoundingClientRect(); S.attractor.x = r.left + r.width / 2; S.attractor.y = r.top + r.height / 2; };
+  cell.addEventListener('pointermove', e => {
+    const r = cell.getBoundingClientRect();
+    cell.style.setProperty('--gx', (e.clientX - r.left) + 'px'); cell.style.setProperty('--gy', (e.clientY - r.top) + 'px');
+  });
+  const on = () => { center(); if (hasGSAP) gsap.to(S.attractor, { strength: 0.8, duration: 0.6, ease: 'power2.out', overwrite: true }); };
+  const off = () => { if (hasGSAP) gsap.to(S.attractor, { strength: 0, duration: 0.9, ease: 'power2.out', overwrite: true }); };
+  cell.addEventListener('pointerenter', on); cell.addEventListener('focus', on);
+  cell.addEventListener('pointerleave', off); cell.addEventListener('blur', off);
 });
 $$('[data-step]').forEach(step => {
   if (!hasGSAP) return;
