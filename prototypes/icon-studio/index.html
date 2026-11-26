@@ -278,6 +278,33 @@ section{position:relative;padding:clamp(96px,14vh,160px) var(--pad)}
 }
 
 /* ==========================================================================
+   Testimonials: one quote at a time, all stacked in one grid cell so the height never jumps
+   ========================================================================== */
+.quotes{display:grid;gap:28px}
+.quotes-stage{display:grid;touch-action:pan-y}
+.quote{grid-area:1 / 1;margin:0;display:grid;gap:26px;align-content:start;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s}
+.quote.is-active{opacity:1;visibility:visible}
+.quote blockquote{margin:0;position:relative;padding-top:54px;max-width:62ch}
+.quote blockquote::before{content:"\201C";position:absolute;top:-22px;left:-6px;font-family:var(--f-display);font-weight:700;font-size:120px;line-height:1;background:linear-gradient(160deg,var(--gold),var(--copper));-webkit-background-clip:text;background-clip:text;color:transparent}
+.quote blockquote p{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(19px,2vw,27px);line-height:1.45;letter-spacing:-.01em;color:#E4E8EF;text-wrap:pretty}
+.quote figcaption{display:flex;align-items:center;gap:14px}
+.q-mono{width:46px;height:46px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:15px;letter-spacing:.04em;color:#00161a;background:linear-gradient(135deg,var(--ion),var(--brand-blue))}
+.q-name{display:block;font-family:var(--f-display);font-weight:600;font-size:17px}
+.q-role{display:block;color:var(--muted);font-size:14px}
+.quotes-nav{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding-top:22px;border-top:1px solid var(--line)}
+.q-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font-size:18px;transition:border-color .3s,color .3s}
+.q-btn:hover{border-color:var(--ion);color:var(--ion)}
+.q-count{font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;color:var(--muted);min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+.q-src{margin-left:auto;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.q-src:hover{color:var(--ion)}
+@media (max-width:640px){.q-src{margin-left:0;width:100%}}
+@media (min-width:1000px){
+  .quote{grid-template-columns:minmax(0,1fr) 300px;column-gap:72px;align-items:end}
+  .quote blockquote p{font-size:clamp(18px,1.6vw,24px)}
+  .quote figcaption{padding:0 0 6px 24px;border-left:1px solid var(--line-2)}
+}
+
+/* ==========================================================================
    Contact and footer
    ========================================================================== */
 .contact{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(32px,6vw,96px);align-items:start}
@@ -623,11 +650,46 @@ footer{position:relative;z-index:var(--z-content);padding:48px var(--pad) 40px;b
     </div>
   </section>
 
+  <!-- TESTIMONIALS: quoted verbatim from LinkedIn recommendations, as published on icon-studios.com -->
+  <section id="testimonials" aria-labelledby="testimonials-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal>06 / Testimonials</p>
+          <h2 class="h2" id="testimonials-title" data-reveal>In their<br><em>own words.</em></h2>
+        </div>
+        <p class="lede" data-reveal>Recommendations from producers and creatives who worked with us, quoted exactly as they wrote them.</p>
+      </div>
+      <div class="quotes" data-quotes data-reveal>
+        <div class="quotes-stage" aria-live="polite">
+          <figure class="quote is-active" data-quote>
+            <blockquote><p>There are many animated video production companies out there, and most companies know their way around the art however ICon Studio has a highly experienced and professional team of script writers, designers, animators, voiceover artists and project managers which gives quality videos as output. They have worked for many clients including Jeem TV in which I was The Production Manager, ICon delivered high-quality products and exceptional service with every order!</p></blockquote>
+            <figcaption><span class="q-mono" aria-hidden="true">NK</span><span><span class="q-name">Nasser Kaabour</span><span class="q-role">Executive Producer &middot; formerly Production Manager, Jeem TV</span></span></figcaption>
+          </figure>
+          <figure class="quote" data-quote aria-hidden="true">
+            <blockquote><p>I've witnessed Dr. Ashraf Ahmed's exceptional capabilities in video and animation production. During my tenure at Jeem TV, he consistently impressed me with his adeptness in preparing and delivering engaging reports, with the ability to do so from various cities worldwide. Similarly, when I hired his services at Euronews to film a mini documentary, he and his team delivered outstanding results. Overall, his commitment to excellence and unmatched expertise make him an invaluable asset in the industry.</p></blockquote>
+            <figcaption><span class="q-mono" aria-hidden="true">ME</span><span><span class="q-name">Mohamed Elashi</span><span class="q-role">Sr. Producer &middot; Euronews Doha</span></span></figcaption>
+          </figure>
+          <figure class="quote" data-quote aria-hidden="true">
+            <blockquote><p>One of the leaders of Graphics design in Egypt, He is a teacher for my generation, His studio is an icon as its name for the graphics design and media production....Looking to enjoy your next work, Good Luck.</p></blockquote>
+            <figcaption><span class="q-mono" aria-hidden="true">AH</span><span><span class="q-name">Ahmed Hammam</span><span class="q-role">Art Director &middot; H line studio</span></span></figcaption>
+          </figure>
+        </div>
+        <div class="quotes-nav">
+          <button class="q-btn" type="button" data-q="prev" aria-label="Previous testimonial">&larr;</button>
+          <span class="q-count" aria-hidden="true">01 / 03</span>
+          <button class="q-btn" type="button" data-q="next" aria-label="Next testimonial">&rarr;</button>
+          <a class="q-src" href="https://www.linkedin.com/in/ashrafahmed1998/" target="_blank" rel="noopener">Source: LinkedIn recommendations &nearr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT: formation 5, portal ring -->
   <section id="contact" data-formation="5" aria-labelledby="contact-title">
     <div class="wrap contact">
       <div>
-        <p class="eyebrow" data-reveal>06 / Start a Project</p>
+        <p class="eyebrow" data-reveal>07 / Start a Project</p>
         <h2 class="h2" id="contact-title" data-reveal>Bring the story.<br><em>We bring the physics.</em></h2>
         <p class="lede" data-reveal>Series, commercials, films, sound or an AI pipeline for your own studio. Tell us what you are building and we will reply within two working days.</p>
         <ul class="contact-list" data-reveal>
@@ -962,6 +1024,38 @@ $$('[data-client]').forEach(cell => {
   cell.addEventListener('pointerenter', on); cell.addEventListener('focus', on);
   cell.addEventListener('pointerleave', off); cell.addEventListener('blur', off);
 });
+const qWrap = $('[data-quotes]');
+if (qWrap) {
+  const quotes = $$('[data-quote]', qWrap), qCount = $('.q-count', qWrap);
+  let qi = 0;
+  const showQuote = n => {
+    const prev = quotes[qi];
+    qi = (n + quotes.length) % quotes.length;
+    const next = quotes[qi];
+    if (prev !== next) {
+      prev.classList.remove('is-active'); prev.setAttribute('aria-hidden', 'true');
+      next.classList.add('is-active'); next.removeAttribute('aria-hidden');
+      if (hasGSAP && !S.reduced) gsap.fromTo(next, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', clearProps: 'opacity,transform' });
+    }
+    qCount.textContent = `${String(qi + 1).padStart(2, '0')} / ${String(quotes.length).padStart(2, '0')}`;
+  };
+  qWrap.addEventListener('click', e => {
+    const b = e.target.closest('[data-q]'); if (!b) return;
+    showQuote(qi + (b.dataset.q === 'next' ? 1 : -1));
+  });
+  qWrap.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') showQuote(qi + 1);
+    else if (e.key === 'ArrowLeft') showQuote(qi - 1);
+  });
+  let swipeX = null;
+  const stageEl = $('.quotes-stage', qWrap);
+  stageEl.addEventListener('pointerdown', e => { swipeX = e.clientX; });
+  stageEl.addEventListener('pointerup', e => {
+    if (swipeX === null) return;
+    const dx = e.clientX - swipeX; swipeX = null;
+    if (Math.abs(dx) > 50) showQuote(qi + (dx < 0 ? 1 : -1));
+  });
+}
 $$('[data-step]').forEach(step => {
   if (!hasGSAP) return;
   const on = () => gsap.to(S, { signalBoost: 3.4, duration: 0.6, ease: 'power2.out', overwrite: 'auto' });
